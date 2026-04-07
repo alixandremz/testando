@@ -1,65 +1,48 @@
-import csv
-import os 
-import posts.csv
+from utils import (
+    Cor, cabecalho, linha, msg_erro, msg_info, entrada, pausar,
+    badge_usuario, pode_moderar, LARGURA, limpar_tela
+)
 
-'''caminho dos arquivos'''
+# ─────────────────────────────────────────
+#  TELA DE BOAS-VINDAS / SPLASH
+# ─────────────────────────────────────────
+def tela_boas_vindas():
+    limpar_tela()
+    print()
+    print(f"  {Cor.AZUL}{'═' * (LARGURA - 4)}{Cor.RESET}")
+    print()
+    print(f"  {Cor.BOLD}{Cor.BRANCO}  🏙️   S I S T E M A   C R A T O{Cor.RESET}")
+    print()
+    print(f"  {Cor.DIM}  Portal de Ocorrências e Notícias da Cidade do Crato{Cor.RESET}")
+    print(f"  {Cor.DIM}  Ceará — Brasil{Cor.RESET}")
+    print()
+    print(f"  {Cor.AZUL}{'═' * (LARGURA - 4)}{Cor.RESET}")
+    print()
 
-caminho_comentarios = "dados/comentarios.csv"
-caminho_avaliações = "dados/avaliações"
+# ─────────────────────────────────────────
+#  MENU INICIAL — Cadastro / Login / Continuar
+# ─────────────────────────────────────────
+def menu_inicial() -> str:
+    """
+    Retorna: 'cadastro' | 'login' | 'continuar'
+    """
+    tela_boas_vindas()
 
-'''comentario'''
+    print(f"  {Cor.BOLD}Como deseja continuar?{Cor.RESET}\n")
+    print(f"  {Cor.AMARELO}[1]{Cor.RESET} Criar conta")
+    print(f"  {Cor.AMARELO}[2]{Cor.RESET} Entrar (login)")
+    print(f"  {Cor.AMARELO}[3]{Cor.RESET} Continuar sem login")
+    print(f"\n  {Cor.DIM}[0] Sair do sistema{Cor.RESET}")
+    print()
 
-def adicionar_comentario(post_id, autor, comentario)
-  with open(caminho_comentarios, mode='r', encoding='utf-8') as f:
-    linhas = list(csv.reader(f))
-    novo_id = len(linhas)
-
-  with open(caminho_comentarios, mode='a', newline '', encoding='utf-8') as f:
-    writer = csv.writer(f)
-    writer.writerow([novo_id, post_id, autor, comentario])
-
-def listar_comentarios(post_id):
-  comentarios = []
-
-  with open(caminho_comentarios, mode='r', encoding='utf-8') as f:
-    reader = csv.DictReader(f)
-    for linha in reader:
-      if linha["post_id"] == str(post_id):
-        comentarios.append(linha)
-  
-  return comentarios
-
-'''avaliações'''
-
-def avaliar_post(post_id, usuario, veridico):
-
-  '''impedir usuario de avaliar duas vezes'''
-  with open(caminho_comentarios, mode='a', newline '', encoding='utf-8') as f:
-    reader = csv.DictReader(f)
-    for linha in reader:
-    if linha["post_id"] == srt(post_id) and linha["usuario"] == usuario:
-      print("Usuário já avaliou este post.")
-      return
-   
-  with open(caminho_comentarios, mode='r', encoding='utf-8') as f:
-    linhas = list(csv.reader(f))
-    novo_id = len(linhas)
-
-  with open(caminho_comentarios, mode='r', encoding='utf-8') as f:
-    writer = csv.writer(f)
-    writer.writerow([novo_id, post_id, usuario, veridico])
-
-
-def contar_avaliacoes(post_id):
-  positivos = 0
-  negativos = 0 
-
-  with open(caminho_comentarios, mode='r', encoding='utf-8') as f:
-    reader = csv.DictReader(f)
-    for linha in reader:
-      if linha["post_id"] == str(post_id):
-        positivo += 1
-      else:
-        negativos += 1
-        
-  return positivos, negativos
+    while True:
+        cmd = entrada("  Escolha: ", obrigatorio=False).strip()
+        if cmd == "1":
+            return "cadastro"
+        if cmd == "2":
+            return "login"
+        if cmd == "3":
+            return "continuar"
+        if cmd == "0":
+            return "sair"
+        msg_erro("Opção inválida. Digite 1, 2, 3 ou 0.")
