@@ -1,4 +1,4 @@
-print("Dev de usuários)
+print("Dev de usuários")
 def cadastrar_usuario():
     nome = input('Nome: ')
     email = input('Email: ')
