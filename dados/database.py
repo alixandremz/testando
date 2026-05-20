@@ -1,7 +1,9 @@
 import sqlite3
+import os
 
+caminho_banco = os.path.join(os.path.dirname(__file__), "cratovia.db")
 def conectar():
-    conn = sqlite3.connect("cratovia.db")
+    conn = sqlite3.connect(caminho_banco)
     conn.execute("PRAGMA foreign_keys = ON")
     conn.row_factory = sqlite3.Row
     return conn
