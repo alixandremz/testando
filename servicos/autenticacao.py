@@ -1,6 +1,6 @@
-
 import hashlib
 from dados.database import conectar
+
 
 # =========================
 # CRIPTOGRAFAR SENHA
@@ -61,7 +61,27 @@ def cadastrar_usuario(nome, email, senha):
     # retorna usuário completo
     return dict(usuario), "Cadastro realizado com sucesso!"
 
+# =========================
+# CRIAR TABELA USUÁRIOS
+# =========================
 
+def criar_tabela_usuarios():
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            senha TEXT NOT NULL,
+            tipo TEXT DEFAULT 'comum'
+        )
+    """)
+
+    conn.commit()
+    conn.close()
 # =========================
 # LOGIN
 # =========================
@@ -147,7 +167,7 @@ def menu_autenticacao():
     def linha_separadora():
 
         print("=" * 40)
-        
+
 
     while True:
 
@@ -190,13 +210,15 @@ def menu_autenticacao():
 
                 input("\nPressione Enter para continuar...")
 
-                return usuario
+                continue
 
             else:
 
                 mensagem_erro(mensagem)
 
                 input("\nPressione Enter para tentar novamente...")
+
+                continue
 
         # =========================
         # CADASTRO
@@ -226,7 +248,7 @@ def menu_autenticacao():
 
                 input("\nPressione Enter para continuar...")
 
-                return usuario
+                continue
 
             else:
 
@@ -234,23 +256,34 @@ def menu_autenticacao():
 
                 input("\nPressione Enter para tentar novamente...")
 
+                continue
+
         # =========================
         # CONTINUAR SEM LOGIN
         # =========================
 
         elif opcao == "3":
-            return None
+
+            print("\nContinuando sem login...")
+
+            input("\nPressione Enter para continuar...")
+
+            continue
 
         # =========================
         # SAIR
         # =========================
 
         elif opcao == "0":
-            exit()
+
+            print("\nPrograma encerrado.")
+
+            break
 
         else:
 
             print("\nOpção inválida.")
+
             input("\nPressione Enter para continuar...")
 
 
@@ -258,4 +291,5 @@ def menu_autenticacao():
 # INICIAR MENU
 # =========================
 
+criar_tabela_usuarios()
 menu_autenticacao()
