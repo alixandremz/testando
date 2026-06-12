@@ -189,13 +189,14 @@ def ler_postagem(postagem_id, usuario):
     print("-" * 50)
 
     if usuario:
-        print("\n  [U] Útil   [D] Denunciar   [ENTER] Voltar")
+        print("\n  [U] Útil   [D] Denunciar   [C] Comentários   [ENTER] Voltar")
         op = input("\n  Ação: ").strip().upper()
         if op == "U":
             votar_util(postagem_id, usuario)
         elif op == "D":
             denunciar(postagem_id, usuario)
+        elif op == "C":
+            from modulos.interacoes import ver_comentarios
+            ver_comentarios(postagem_id, usuario)
     else:
-        print("  Faça login para votar ou denunciar.")
-
-    pausar()
+        print("  Faça login para votar, denunciar ou comentar.")

@@ -52,13 +52,15 @@ def exibir_lista(posts, titulo, usuario):
         for i, post in enumerate(posts, 1):
             print(f"  [{i}] {post['titulo'][:45]}")
         op = input("\n  Escolha: ").strip().upper()
-        if op != "X":
-            try:
-                num = int(op)
-                if 1 <= num <= len(posts):
-                    ler_postagem(posts[num - 1]["id"], usuario)
-            except ValueError:
-                pass
+        if op == "X":
+            return
+        try:
+            num = int(op)
+            if 1 <= num <= len(posts):
+                ler_postagem(posts[num - 1]["id"], usuario)
+                exibir_lista(posts, titulo, usuario)
+        except ValueError:
+            pass
     else:
         print("\n  Faça login para interagir.")
         pausar()
