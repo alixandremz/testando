@@ -3,7 +3,7 @@ from modulos.utils import agora
 
 LIMITE_DENUNCIAS = 5
 
-# ── Votar útil em uma postagem ────────────────────────────────────────────────
+# Votar útil em uma postagem
 def votar_util(postagem_id, usuario):
     uid = usuario["id"]
 
@@ -22,6 +22,11 @@ def votar_util(postagem_id, usuario):
                 "UPDATE postagens SET votos_uteis = votos_uteis - 1 WHERE id=?",
                 (postagem_id,)
             )
+            conn.execute("""
+                UPDATE usuarios SET relevancia = relevancia - 1
+                WHERE id = (SELECT usuario_id FROM postagens WHERE id=?)
+            """, (postagem_id,))
+
             votos = conn.execute(
                 "SELECT votos_uteis FROM postagens WHERE id=?", (postagem_id,)
             ).fetchone()[0]
@@ -32,17 +37,18 @@ def votar_util(postagem_id, usuario):
             "INSERT INTO votos_uteis (usuario_id, postagem_id) VALUES (?,?)",
             (uid, postagem_id)
         )
-        conn.execute(
-            "UPDATE postagens SET votos_uteis = votos_uteis + 1 WHERE id=?",
-            (postagem_id,)
-        )
+        conn.execute("""
+            UPDATE usuarios SET relevancia = relevancia + 1
+            WHERE id = (SELECT usuario_id FROM postagens WHERE id=?)
+        """, (postagem_id,))
+
         votos = conn.execute(
             "SELECT votos_uteis FROM postagens WHERE id=?", (postagem_id,)
         ).fetchone()[0]
 
     print(f"  {votos} {'pessoa achou' if votos == 1 else 'pessoas acharam'} isso útil.")
 
-# ── Denunciar postagem ────────────────────────────────────────────────────────
+# Denunciar postagem
 def denunciar(postagem_id, usuario):
     uid = usuario["id"]
 
@@ -64,10 +70,11 @@ def denunciar(postagem_id, usuario):
             "INSERT INTO denuncias_fake (usuario_id, postagem_id) VALUES (?,?)",
             (uid, postagem_id)
         )
-        conn.execute(
-            "UPDATE postagens SET denuncias = denuncias + 1 WHERE id=?",
-            (postagem_id,)
-        )
+        conn.execute("""
+                UPDATE usuarios SET relevancia = relevancia - 1
+                WHERE id = (SELECT usuario_id FROM postagens WHERE id=?)
+            """, (postagem_id,))
+            
         total = conn.execute(
             "SELECT denuncias FROM postagens WHERE id=?", (postagem_id,)
         ).fetchone()[0]
@@ -80,7 +87,7 @@ def denunciar(postagem_id, usuario):
         else:
             print("  Denúncia registrada.")
 
-# ── Comentários ───────────────────────────────────────────────────────────────
+# Comentários
 def ver_comentarios(postagem_id, usuario):
     while True:
         with conectar() as conn:
@@ -165,7 +172,7 @@ def ver_comentarios(postagem_id, usuario):
             input("  ENTER para voltar...")
             return
 
-# ── Votar útil em comentário ──────────────────────────────────────────────────
+# Votar útil em comentári0
 def _votar_comentario(comentario_id, usuario):
     uid = usuario["id"]
     with conectar() as conn:
@@ -186,7 +193,7 @@ def _votar_comentario(comentario_id, usuario):
             )
             print("  Comentário marcado como útil.")
 
-# ── Denunciar comentário ──────────────────────────────────────────────────────
+# Denunciar comentário
 def _denunciar_comentario(comentario_id, usuario):
     uid = usuario["id"]
     with conectar() as conn:

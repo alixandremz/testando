@@ -12,7 +12,7 @@ PERMISSOES = {
     "Secretaria de Saúde":          ["Saúde pública", "Outros"],
 }
 
-# ── Verificar se o usuário pode aprovar uma postagem ─────────────────────────
+#Verificar se o usuário pode aprovar uma postagem
 def pode_aprovar(usuario, natureza_nome):
     if usuario["tipo"] == "moderador":
         return True
@@ -20,7 +20,7 @@ def pode_aprovar(usuario, natureza_nome):
     permitidas = PERMISSOES.get(orgao, [])
     return not natureza_nome or natureza_nome in permitidas
 
-# ── Buscar postagens por status ───────────────────────────────────────────────
+#Buscar postagens por status
 def buscar_fila(status):
     with conectar() as conn:
         return [dict(r) for r in conn.execute("""
@@ -32,7 +32,7 @@ def buscar_fila(status):
             ORDER BY p.criado_em ASC
         """, (status,)).fetchall()]
 
-# ── Linha resumida para a fila ────────────────────────────────────────────────
+#Linha resumida para a fila
 def linha_fila(numero, post):
     bairro = (post.get("bairro_nome") or "?").upper()
     hora   = so_hora(post["criado_em"])
@@ -41,7 +41,7 @@ def linha_fila(numero, post):
     tag    = "[AGUARDANDO]" if status == "aguardando" else f"[DENUNCIADO x{post['denuncias']}]"
     return f"  {numero} {tag} {bairro} [{hora}] {titulo}"
 
-# ── Analisar uma postagem da fila ─────────────────────────────────────────────
+#Analisar uma postagem da fila
 def analisar_postagem(post, usuario):
     while True:
         cabecalho("ANALISAR POSTAGEM")
@@ -96,7 +96,7 @@ def analisar_postagem(post, usuario):
         else:
             print("  Opção inválida ou sem permissão.")
 
-# ── Exibir fila de postagens ──────────────────────────────────────────────────
+#Exibir fila de postagens
 def exibir_fila(status, titulo, usuario):
     pagina = 1
     while True:
@@ -135,7 +135,7 @@ def exibir_fila(status, titulo, usuario):
             pass
         print("  Opção inválida.")
 
-# ── Menu de moderação ─────────────────────────────────────────────────────────
+#Menu de moderação
 def menu_moderacao(usuario):
     while True:
         cabecalho("PAINEL DE MODERAÇÃO")
@@ -179,7 +179,7 @@ def menu_moderacao(usuario):
         else:
             print("  Opção inválida.")
 
-# ── Todas as postagens (só moderador) ────────────────────────────────────────
+#Todas as postagens (só moderador)
 def exibir_todas(usuario):
     pagina = 1
     while True:
@@ -220,7 +220,7 @@ def exibir_todas(usuario):
             pass
         print("  Opção inválida.")
 
-# ── Gerenciar códigos de acesso ───────────────────────────────────────────────
+#Gerenciar códigos de acesso
 def gerenciar_codigos():
     while True:
         cabecalho("CÓDIGOS DE ACESSO")

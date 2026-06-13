@@ -1,18 +1,12 @@
 import hashlib
 from dados.database import conectar
 
-
-# =========================
 # CRIPTOGRAFAR SENHA
-# =========================
 
 def hash_senha(senha):
     return hashlib.sha256(senha.encode()).hexdigest()
 
-
-# =========================
 # CADASTRAR USUÁRIO
-# =========================
 
 def cadastrar_usuario(nome, email, telefone, senha, tipo):
 
@@ -31,7 +25,6 @@ def cadastrar_usuario(nome, email, telefone, senha, tipo):
 
     senha_hash = hash_senha(senha)
 
-    # cadastra usuário
     cursor.execute(
         """
         INSERT INTO usuarios (nome, email, telefone, senha, tipo)
@@ -60,9 +53,7 @@ def cadastrar_usuario(nome, email, telefone, senha, tipo):
     # retorna usuário completo
     return dict(usuario), "Cadastro realizado com sucesso!"
     
-# =========================
 # LOGIN
-# =========================
 
 def fazer_login(email, senha):
 
@@ -88,10 +79,7 @@ def fazer_login(email, senha):
 
     return None, "E-mail ou senha incorretos."
 
-
-# =========================
 # BUSCAR USUÁRIO
-# =========================
 
 def buscar_usuario_por_id(usuario_id):
 
@@ -129,11 +117,7 @@ def marcar_codigo_usado(codigo):
     conn.commit()
     conn.close()
 
-
-
-# =========================
 # MENU
-# =========================
 
 def menu_autenticacao():
 
@@ -180,9 +164,7 @@ def menu_autenticacao():
 
         opcao = input("Escolha: ").strip()
 
-        # =========================
         # LOGIN
-        # =========================
 
         if opcao == "1":
 
@@ -216,9 +198,7 @@ def menu_autenticacao():
 
                 continue
 
-        # =========================
         # CADASTRO
-        # =========================
 
         elif opcao == "2":
 
@@ -308,9 +288,7 @@ def menu_autenticacao():
 
                 continue
 
-        # =========================
         # CONTINUAR SEM LOGIN
-        # =========================
 
         elif opcao == "3":
 
@@ -319,10 +297,8 @@ def menu_autenticacao():
             input("\nPressione Enter para continuar...")
 
             return None
-
-        # =========================
+            
         # SAIR
-        # =========================
 
         elif opcao == "0":
 

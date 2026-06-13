@@ -2,7 +2,7 @@ from dados.database import conectar
 from modulos.utils import cabecalho, pausar, so_hora, paginar
 from modulos.postagens import ler_postagem, buscar_bairros, buscar_naturezas
 
-# ── Buscar postagens aprovadas com filtros opcionais ─────────────────────────
+# Buscar postagens aprovadas com filtros opcionais
 def buscar_posts(bairro_id=None, natureza_id=None):
     where  = "WHERE p.status = 'aprovado'"
     params = []
@@ -24,7 +24,7 @@ def buscar_posts(bairro_id=None, natureza_id=None):
             ORDER BY p.criado_em DESC
         """, params).fetchall()]
 
-# ── Exibir postagens completas ────────────────────────────────────────────────
+# Exibir postagens completas 
 def exibir_lista(posts, titulo, usuario):
     cabecalho(titulo)
 
@@ -62,15 +62,19 @@ def exibir_lista(posts, titulo, usuario):
         except ValueError:
             pass
     else:
-        print("\n  Faça login para interagir.")
-        pausar()
+        print("\n  Faça login para interagir. [L] Login   [X] Voltar")
+        op = input("\n  Escolha: ").strip().upper()
+        if op == "L":
+            from modulos.autenticacao import menu_autenticacao
+            usuario = menu_autenticacao()
+            exibir_lista(posts, titulo, usuario)
 
-# ── 1. Feed geral ─────────────────────────────────────────────────────────────
+# 1. Feed geral
 def feed_geral(usuario):
     posts = buscar_posts()
     exibir_lista(posts, "ÚLTIMAS NOTÍCIAS E OCORRÊNCIAS", usuario)
 
-# ── 2. Feed por bairro ────────────────────────────────────────────────────────
+# 2. Feed por bairro
 def feed_por_bairro(usuario):
     bairros = buscar_bairros()
     pagina  = 1
@@ -121,7 +125,7 @@ def feed_por_bairro(usuario):
             pass
         print("  Opção inválida.")
 
-# ── 3. Feed por natureza ──────────────────────────────────────────────────────
+#3. Feed por natureza
 def feed_por_natureza(usuario):
     naturezas = buscar_naturezas()
 

@@ -1,7 +1,7 @@
 from dados.database import conectar
 from modulos.utils import cabecalho, pausar, agora, so_hora, formatar_data, paginar
 
-# ── Buscar listas auxiliares ──────────────────────────────────────────────────
+# Buscar listas auxiliares
 def buscar_bairros():
     with conectar() as conn:
         return [dict(r) for r in conn.execute("SELECT * FROM bairros ORDER BY nome").fetchall()]
@@ -10,7 +10,7 @@ def buscar_naturezas():
     with conectar() as conn:
         return [dict(r) for r in conn.execute("SELECT * FROM naturezas ORDER BY id").fetchall()]
 
-# ── Criar postagem ────────────────────────────────────────────────────────────
+# Criar postagem
 def criar_postagem(usuario):
     bairros   = buscar_bairros()
     naturezas = buscar_naturezas()
@@ -140,8 +140,7 @@ def criar_postagem(usuario):
             pausar()
             return
 
-# ── Exibir postagem completa ──────────────────────────────────────────────────
-# ── Exibir postagem completa ──────────────────────────────────────────────────
+#Exibir postagem completa
 def ler_postagem(postagem_id, usuario):
     from modulos.interacoes import votar_util, denunciar
 
@@ -177,16 +176,24 @@ def ler_postagem(postagem_id, usuario):
 
     autor = post["autor_nome"] or "Anônimo"
     tipo  = post.get("autor_tipo", "comum")
+
+    # Busca relevância do autor para exibir junto ao nome
+    with conectar() as conn:
+        rel = conn.execute(
+            "SELECT relevancia FROM usuarios WHERE id=?",
+            (post["usuario_id"],)
+        ).fetchone()
+    relevancia = rel["relevancia"] if rel else 0
+
     if tipo == "moderador":
         autor += " [MOD]"
     elif tipo == "servidor":
         autor += " [SERVIDOR]"
+    autor += f" | Confiabilidade: {relevancia}"
     print(f"  Publicado por: {autor}")
     print(f"  Data: {formatar_data(post['criado_em'])}")
 
-    votos = post["votos_uteis"]
-    print(f"\n  {votos} {'pessoa achou' if votos == 1 else 'pessoas acharam'} isso útil.")
-    print("-" * 50)
+    votos = post["votos_uteis"]autor += f" | Confiabilidade: {relevancia}"
 
     if usuario:
         print("\n  [U] Útil   [D] Denunciar   [C] Comentários   [ENTER] Voltar")
