@@ -25,7 +25,13 @@ def iniciar_tabelas():
             senha TEXT NOT NULL
         );
     """)
-
+# Migração: adiciona bairro_id caso o banco já exista sem a coluna
+    try:
+        cursor.execute("ALTER TABLE usuarios ADD COLUMN bairro_id INTEGER REFERENCES bairros(id)")
+        conexao.commit()
+    except sqlite3.OperationalError:
+        pass
+        
     # - TABELA DE CÓDIGOS DE ACESSO PARA MODERADOR E SERVIDOR PÚBLICO
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS codigos_acesso (

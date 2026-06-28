@@ -2,6 +2,7 @@ from dados.database import iniciar_tabelas
 from modulos.autenticacao import menu_autenticacao
 from modulos.feed import feed_geral, feed_por_bairro, feed_por_natureza
 from modulos.postagens import criar_postagem
+from modulos.perfil import menu_meu_perfil
 import os
 
 iniciar_tabelas()
@@ -21,6 +22,7 @@ while True:
     print("  2. Filtrar por bairro")
     print("  3. Filtrar por tipo")
     print("  4. Divulgar ocorrência")
+    print("  5. Meu perfil")
     print("  0. Sair")
     print("=" * 40)
 
@@ -34,6 +36,8 @@ while True:
         feed_por_natureza(usuario)
     elif op == "4":
         criar_postagem(usuario)
+    elif op == "5" and usuario:
+        menu_meu_perfil(usuario)
     elif op == "0":
         print("\nAté logo!")
         break

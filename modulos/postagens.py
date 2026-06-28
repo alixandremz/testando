@@ -197,7 +197,7 @@ def ler_postagem(postagem_id, usuario):
     autor += f" | Confiabilidade: {relevancia}"
 
     if usuario:
-        print("\n  [U] Útil   [D] Denunciar   [C] Comentários   [ENTER] Voltar")
+        print("\n  [U] Útil   [D] Denunciar   [C] Comentários   [P] Ver perfil do autor   [ENTER] Voltar")
         op = input("\n  Ação: ").strip().upper()
         if op == "U":
             votar_util(postagem_id, usuario)
@@ -206,5 +206,14 @@ def ler_postagem(postagem_id, usuario):
         elif op == "C":
             from modulos.interacoes import ver_comentarios
             ver_comentarios(postagem_id, usuario)
+        elif op == "P" and post["usuario_id"]:
+            from modulos.perfil import ver_perfil
+            ver_perfil(post["usuario_id"], usuario)
     else:
-        print("  Faça login para votar, denunciar ou comentar.")
+        print("\n  [P] Ver perfil do autor   [ENTER] Voltar")
+        op = input("\n  Ação: ").strip().upper()
+        if op == "P" and post["usuario_id"]:
+            from modulos.perfil import ver_perfil
+            ver_perfil(post["usuario_id"], usuario)
+        else:
+            print("  Faça login para votar, denunciar ou comentar.")
