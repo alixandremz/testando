@@ -193,7 +193,8 @@ def ler_postagem(postagem_id, usuario):
     print(f"  Publicado por: {autor}")
     print(f"  Data: {formatar_data(post['criado_em'])}")
 
-    votos = post["votos_uteis"]autor += f" | Confiabilidade: {relevancia}"
+    votos = post["votos_uteis"]
+    autor += f" | Confiabilidade: {relevancia}"
 
     if usuario:
         print("\n  [U] Útil   [D] Denunciar   [C] Comentários   [ENTER] Voltar")
